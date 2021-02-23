@@ -1,28 +1,49 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div>
+      <div class="banner"> 
+        <h1>Esta página fue creada como reto</h1>
+        <button @click="this.goToChallenge">Míralo aquí</button>
+      </div>
+      <ListComponent id="challenge" :categories="categories" />
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import ListComponent from './components/list-component.vue'
+import { categories } from "@/api/drinks";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    ListComponent
+  },
+  data() {
+    return {
+      categories: null,
+    };
+  },
+  created() {
+    this.fetchDrinks();
+  },
+  methods: {
+    fetchDrinks() {
+      categories()
+        .then(({ data }) => {
+          this.categories = data.drinks;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    goToChallenge(){
+      const element = document.getElementById('challenge');
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import "./assets/GlobalStyles.css";
 </style>
